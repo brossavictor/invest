@@ -1,0 +1,14 @@
+.calculator {
+  gap: 4rem;
+  margin: auto;
+  background-color: var(--black-secondary);
+  color: var(--primary-green);
+  width: 556px;
+  padding: 2rem;
+  padding-top: 4.5rem;
+  border-radius: 0.75rem;
+}
+
+.language {
+  margin-left: auto;
+}

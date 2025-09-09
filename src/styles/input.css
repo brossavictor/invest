@@ -1,0 +1,20 @@
+input {
+  background-color: var(--black-tertiary);
+  color: var(--text-color);
+}
+
+fieldset {
+  border-style: none;
+  display: flex;
+  flex: 1;
+  max-height: calc(var(--spacing) * 20);
+  color: var(--color-gray-200);
+}
+
+legend {
+  text-transform: uppercase;
+
+  font-weight: 600;
+
+  margin-bottom: 0.25rem;
+}

@@ -1,5 +1,4 @@
-import type { Investment } from "../types/investment";
-import type { FormattedInvestment } from "../types/formattedInvestment";
+import type { FormattedInvestment, Investment } from "../types/investment";
 
 export function Invest({
   capital,
@@ -17,30 +16,35 @@ export function Invest({
   }
 
   function formatInvestment(investmentData: Investment): FormattedInvestment {
-    return Object.entries(investmentData).reduce((accumulator, current) => {
-      const [key, value] = current;
-      if (
-        typeof value === "number" &&
-        key != "interest_rate" &&
-        key !== "periods"
-      ) {
-        // Type assertion workaround: only assign to known keys of FormattedInvestment
-        (accumulator as any)[key] = new Intl.NumberFormat(iso, {
-          style: "currency",
-          currency: currency,
-        }).format(value);
-      }
-      if (typeof value === "number" && key === "interest_rate") {
-        accumulator[key] = new Intl.NumberFormat(iso, {
-          style: "percent",
-          minimumFractionDigits: 3,
-        }).format(value);
-      }
+    return Object.entries(investmentData).reduce(
+      (accumulator, current) => {
+        const [key, value] = current;
+        const typedKey = key as keyof Investment;
+        if (
+          typeof value === "number" &&
+          /*         typedKey != "interest_rate" &&
+        typedKey !== "periods" */
+          (typedKey == "capital" ||
+            typedKey == "objective" ||
+            typedKey == "increment" ||
+            typedKey == "amount")
+        ) {
+          accumulator[typedKey] = new Intl.NumberFormat(iso, {
+            style: "currency",
+            currency: currency,
+          }).format(value);
+        }
+        if (typeof value === "number" && typedKey === "interest_rate") {
+          accumulator[typedKey] = new Intl.NumberFormat(iso, {
+            style: "percent",
+            minimumFractionDigits: 3,
+          }).format(value);
+        }
 
-      console.log("accumulator: ", accumulator);
-
-      return accumulator;
-    }, {} as FormattedInvestment);
+        return accumulator;
+      },
+      { iso, currency } as FormattedInvestment
+    );
   }
 
   const investment: Investment = {
@@ -79,6 +83,8 @@ export function Invest({
       }
     }
   }
+
+  console.log(investment);
 
   return formatInvestment(investment);
 }
